@@ -1,12 +1,10 @@
 package com.p5.adoptions.api.controllers;
 
-import com.p5.adoptions.repository.cats.Cat;
-import com.p5.adoptions.service.CatService;
+import com.p5.adoptions.model.CatDTO;
+import com.p5.adoptions.model.ListDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
+import com.p5.adoptions.service.CatService;
 
 @RestController
 @RequestMapping("/v1/cats")
@@ -18,15 +16,20 @@ public class CatController
         this.catService = catService;
     }
     @GetMapping
-    public ResponseEntity<List<Cat>>getAllCats()
+    public ResponseEntity<ListDTO<CatDTO>>getAllCats()
     {
-        List<Cat> catList=catService.findAll();
-        return ResponseEntity.ok(catList);
+        return ResponseEntity.ok(catService.findAll());
     }
 
     @PostMapping
-    public void addCat(@RequestBody Cat cat)
+    public void addCat(@RequestBody CatDTO catDto)
+
     {
-        catService.addCat(cat);
+        catService.addCat(catDto);
+    }
+    @GetMapping("/{name}")
+    public ResponseEntity<CatDTO> getCatByName(@PathVariable("name")String name)
+    {
+        return ResponseEntity.ok(catService.findCat(name));
     }
 }

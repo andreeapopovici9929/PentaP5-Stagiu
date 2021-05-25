@@ -1,17 +1,19 @@
 package com.p5.adoptions.model;
 
 public class Animal {
+    public Animal()
+    {
+    }
+    protected Integer id;
     protected String name;
     protected String photoUrl;
 
-    public Animal(String name, String photoUrl) {
+    public Animal(String name, String photoUrl,Integer id) {
         this.name = name;
         this.photoUrl = photoUrl;
+        this.id=id;
     }
 
-    public Animal() {
-
-    }
 
     public void speak(){
       System.out.println("Animal Speaks!");
@@ -41,4 +43,13 @@ public class Animal {
         this.photoUrl = photoUrl;
         return this;
     }
+    public Integer getId() {
+        return id;
+    }
+
+    public Animal setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
 }

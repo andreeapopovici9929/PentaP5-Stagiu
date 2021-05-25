@@ -1,12 +1,11 @@
 package com.p5.adoptions.api.controllers;
 
-import com.p5.adoptions.repository.dogs.Dog;
-import com.p5.adoptions.service.DogService;
+
+import com.p5.adoptions.model.DogDTO;
+import com.p5.adoptions.model.ListDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
+import com.p5.adoptions.service.DogService;
 
 @RestController
 @RequestMapping("/v1/dogs")
@@ -14,21 +13,24 @@ public class DogController
 {
     private final DogService dogService;
 
-
-    public DogController(DogService dogService)
-    {
+    public DogController(DogService dogService) {
         this.dogService = dogService;
     }
     @GetMapping
-    public ResponseEntity<List<Dog>>getAllDogs()
+    public ResponseEntity<ListDTO<DogDTO>>getAllCats()
     {
-        List<Dog> dogList=dogService.findAll();
-        return ResponseEntity.ok(dogList);
+        return ResponseEntity.ok(dogService.findAll());
     }
 
     @PostMapping
-    public void addCat(@RequestBody Dog dog)
+    public void addDog(@RequestBody DogDTO dogDto)
+
     {
-        dogService.addDog(dog);
+        dogService.addDog(dogDto);
+    }
+    @GetMapping("/{name}")
+    public ResponseEntity<DogDTO> getDogByName(@PathVariable("name")String name)
+    {
+        return ResponseEntity.ok(dogService.findDog(name));
     }
 }
