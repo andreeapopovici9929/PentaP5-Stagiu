@@ -1,4 +1,4 @@
-package com.p5.adoptions.controllers;
+package com.p5.adoptions.api.controllers;
 
 import com.p5.adoptions.model.Animal;
 import com.p5.adoptions.repository.AnimalStore;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/animals")
-public class AnimalController {
+    @RestController
+    @RequestMapping("/api/v1/animals")
+  public class AnimalController {
     //OLD WAY: No Bueno: @RequestMapping(method = RequestMethod.GET,value = "/hello")
     @GetMapping("/hello")
     public ResponseEntity<String> greetOwner(@RequestParam(name = "name", required = false) String ownerName) {
