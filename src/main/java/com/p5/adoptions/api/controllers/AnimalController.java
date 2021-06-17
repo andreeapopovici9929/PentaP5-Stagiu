@@ -39,6 +39,7 @@ import java.util.List;
             return ResponseEntity.badRequest().body(animal);
         }
         AnimalStore.available.add(animal);
+
         return ResponseEntity.ok(animal);
     }
 
