@@ -8,6 +8,9 @@ import com.p5.adoptions.model.validations.OnUpdate;
 import com.p5.adoptions.repository.animals.AnimalRepository;
 import com.p5.adoptions.repository.shelter.AnimalShelter;
 import com.p5.adoptions.repository.shelter.AnimalShelterRepository;
+import com.p5.adoptions.service.exceptions.AnimalShelterNotFoundException;
+import com.p5.adoptions.service.exceptions.ShelterAddressException;
+import com.p5.adoptions.service.exceptions.Violation;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -40,6 +43,13 @@ public class AnimalShelterService {
     public AnimalShelterDTO updateShelter(@Valid AnimalShelterDTO shelterDTO) {
 
         validateShelter(shelterDTO);
+        // try catch block with exception propagation
+//        try {
+//            validateShelter(shelterDTO);
+//        } catch (RuntimeException ex) {
+//            Logger.getAnonymousLogger().warning(ex.getMessage());
+//            throw new RuntimeException(ex);
+//        }
 
         return AnimalShelterAdapter.toDto(animalShelterRepository.save(AnimalShelterAdapter.fromDto(shelterDTO)));
     }
@@ -47,7 +57,7 @@ public class AnimalShelterService {
     private void validateShelter(AnimalShelterDTO shelterDTO) {
 
         if (!shelterDTO.getAddress().toLowerCase(Locale.ROOT).contains("brasov")) {
-            throw new RuntimeException("Shelter is not from BRASOV");
+            throw new ShelterAddressException(new Violation("address", "Shelter is not from BRASOV", shelterDTO.getAddress()));
         }
 
         for (AnimalDTO animal : shelterDTO.getAnimals()) {
@@ -55,11 +65,11 @@ public class AnimalShelterService {
                 throw new RuntimeException("Animal does not have a valid url");
             }
         }
+        animalShelterRepository.findById(shelterDTO.getId()).orElseThrow(() -> new AnimalShelterNotFoundException("Shelter not found"));
 
-        animalShelterRepository.findById(shelterDTO.getId()).orElseThrow(() -> new RuntimeException("Shelter not found"));
     }
-
     public List<AnimalShelterDTO> getAll() {
+
         return AnimalShelterAdapter.toListDto(animalShelterRepository.findAll());
     }
 }
